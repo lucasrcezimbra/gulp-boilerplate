@@ -54,6 +54,7 @@ gulp.task('replacehtml', function(){
     .pipe(gulp.dest('build/'));
 });
 
+gulp.task('cleanimages', shell.task('rm -f build/images/*'));
 gulp.task('minifyimages', function () {
   return gulp
     .src('src/images/*')
@@ -62,15 +63,22 @@ gulp.task('minifyimages', function () {
 });
 
 
-gulp.task('jsSequence', gulpSequence('cleanjs', 'uglifyjs', 'replacehtml'));
-gulp.task('cssSequence', gulpSequence('cleancss', 'minifycss', 'replacehtml'));
+gulp.task('imagesSequence', function(callback) {
+  gulpSequence('cleanimages', 'minifyimages')(callback);
+});
+gulp.task('jsSequence', function(callback) {
+  gulpSequence('cleanjs', 'uglifyjs', 'replacehtml')(callback);
+});
+gulp.task('cssSequence', function(callback) {
+  gulpSequence('cleancss', 'minifycss', 'replacehtml')(callback);
+});
 
-gulp.task('build', gulpSequence(['cleanjs', 'cleancss'], ['uglifyjs', 'minifycss', 'minifyimages', 'copylibs'], 'replacehtml'));
+gulp.task('build', gulpSequence(['cleanimages', 'cleanjs', 'cleancss'], ['minifyimages', 'uglifyjs', 'minifycss', 'copylibs'], 'replacehtml'));
 
 gulp.task('watch', function(){
   gulp.watch('src/js/*.js', ['jsSequence'])
   gulp.watch('src/css/*.scss', ['cssSequence']);
   gulp.watch('src/libs/*', ['copylibs']);
-  gulp.watch('src/images/*', ['minifyimages']);
+  gulp.watch('src/images/*', ['imagesSequence']);
   gulp.watch('src/*.html', ['replacehtml']);
 });

@@ -1,16 +1,11 @@
 {
-  "name": "gulp",
   "version": "1.0.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/lrcezimbra/gulp.git"
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Lucas Rangel Cezimbra",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/lrcezimbra/gulp/issues"
-  },
-  "homepage": "https://github.com/lrcezimbra/gulp",
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
