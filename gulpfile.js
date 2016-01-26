@@ -58,7 +58,7 @@ gulp.task('cleanimages', shell.task('rm -f build/images/*'));
 gulp.task('minifyimages', function () {
   return gulp
     .src('src/images/*')
-    .pipe(imagemin())
+  //.pipe(imagemin())
     .pipe(gulp.dest('build/images'));
 });
 
