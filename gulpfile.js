@@ -5,6 +5,7 @@ var watch = require('gulp-watch');
 var minifyCss = require('gulp-minify-css');
 var concat = require('gulp-concat');
 var htmlReplace = require('gulp-html-replace');
+var htmlVariable = require('gulp-replace-task');
 var fileinclude = require('gulp-file-include');
 var imagemin = require('gulp-imagemin');
 var gulpSequence = require('gulp-sequence');
@@ -40,6 +41,7 @@ gulp.task('copylibs', function(){
 gulp.task('replacehtml', function(){
   var jsName = 'js/' + fs.readdirSync('./build/js/')[0];
   var cssName = 'css/' + fs.readdirSync('./build/css/')[0];
+  var htmlVariablesJSON = JSON.parse(fs.readFileSync('./src/settings.json').toString());
 
   return gulp
     .src('src/index.html')
@@ -51,6 +53,7 @@ gulp.task('replacehtml', function(){
       'js': jsName,
       'css': cssName
     }))
+    .pipe(htmlVariable(htmlVariablesJSON))
     .pipe(gulp.dest('build/'));
 });
 
@@ -58,7 +61,7 @@ gulp.task('cleanimages', shell.task('rm -f build/images/*'));
 gulp.task('minifyimages', function () {
   return gulp
     .src('src/images/*')
-  //.pipe(imagemin())
+    //.pipe(imagemin())
     .pipe(gulp.dest('build/images'));
 });
 
@@ -81,4 +84,5 @@ gulp.task('watch', function(){
   gulp.watch('src/libs/*', ['copylibs']);
   gulp.watch('src/images/*', ['imagesSequence']);
   gulp.watch('src/*.html', ['replacehtml']);
+  gulp.watch('src/*.json', ['replacehtml']);
 });
