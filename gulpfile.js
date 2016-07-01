@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var gutil = require('gulp-util');
 var uglifyjs = require('gulp-uglify');
 var watch = require('gulp-watch');
-var minifyCss = require('gulp-minify-css');
+var cleanCSS = require('gulp-clean-css');
 var concat = require('gulp-concat');
 var htmlReplace = require('gulp-html-replace');
 var htmlVariable = require('gulp-replace-task');
@@ -28,7 +28,7 @@ gulp.task('minifycss', function(){
     .src('src/css/*.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(concat('styles-'+ Date.now() +'.css'))
-    .pipe(minifyCss({compatibility: 'ie8'}))
+    .pipe(cleanCSS())
     .pipe(gulp.dest('build/css'));
 });
 
