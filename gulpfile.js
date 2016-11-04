@@ -5,13 +5,13 @@ var watch = require('gulp-watch');
 var cleanCSS = require('gulp-clean-css');
 var concat = require('gulp-concat');
 var htmlReplace = require('gulp-html-replace');
-var htmlVariable = require('gulp-replace-task');
 var fileinclude = require('gulp-file-include');
 var imagemin = require('gulp-imagemin');
 var gulpSequence = require('gulp-sequence');
 var sass = require('gulp-sass');
 var fs = require('fs');
 var shell = require('gulp-shell');
+var mustache = require('gulp-mustache');
 
 gulp.task('cleanjs', shell.task('rm -f build/js/*'));
 gulp.task('uglifyjs', function(){
@@ -41,7 +41,6 @@ gulp.task('copylibs', function(){
 gulp.task('replacehtml', function(){
   var jsName = 'js/' + fs.readdirSync('./build/js/')[0];
   var cssName = 'css/' + fs.readdirSync('./build/css/')[0];
-  var htmlVariablesJSON = JSON.parse(fs.readFileSync('./src/settings.json').toString());
 
   return gulp
     .src('src/index.html')
@@ -53,7 +52,7 @@ gulp.task('replacehtml', function(){
       'js': jsName,
       'css': cssName
     }))
-    .pipe(htmlVariable(htmlVariablesJSON))
+	.pipe(mustache('./src/settings.json'))
     .pipe(gulp.dest('build/'));
 });
 
