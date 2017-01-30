@@ -26,6 +26,7 @@ gulp.task('cleancss', shell.task('rm -f build/css/*'));
 gulp.task('minifycss', function(){
   return gulp
     .src('src/css/*.scss')
+	.pipe(mustache('./src/settings.json'))
     .pipe(sass().on('error', sass.logError))
     .pipe(concat('styles-'+ Date.now() +'.css'))
     .pipe(cleanCSS())
@@ -83,5 +84,5 @@ gulp.task('watch', function(){
   gulp.watch('src/libs/*', ['copylibs']);
   gulp.watch('src/images/*', ['imagesSequence']);
   gulp.watch('src/*.html', ['replacehtml']);
-  gulp.watch('src/*.json', ['replacehtml']);
+  gulp.watch('src/*.json', ['replacehtml', 'cssSequence']);
 });
